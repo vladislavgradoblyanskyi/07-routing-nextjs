@@ -39,7 +39,7 @@ export async function deleteNote(id: string) {
   return response.data;
 }
 
-export const fetchNoteById = async (id:string) => {
+export const fetchNotesById = async (id:string) => {
   const res = await instance.get<Note>(`/notes/${id}`);
   return res.data;
 };
