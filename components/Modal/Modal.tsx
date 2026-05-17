@@ -1,37 +1,46 @@
-"use client"
+"use client";
 import { createPortal } from "react-dom";
-// import { useEffect } from "react";
 import css from "./Modal.module.css";
-import { useRouter } from 'next/navigation';
+import type React from "react";
+import { useEffect } from "react";
 
 interface ModalProps {
+  onClose: () => void;
   children: React.ReactNode;
 }
 
+export default function Modal({ onClose, children }: ModalProps) {
+  const handleBackDropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
 
-export default function Modal({ children}: ModalProps){
-    const router = useRouter();
-    const close = () => router.back();
-    // useEffect(() => {
-    //   const close = () => router.back();
-    //    function handleEsc(evt: KeyboardEvent) {
-    //      if (evt.key === "Escape") {
-    //        close();
-    //      }
-    //    }
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
 
-    //    window.addEventListener("keydown", handleEsc);
-    //    return () => {window.removeEventListener("keydown", handleEsc)};
-    //  },
-    //  [close]
-    // );
-
-    return createPortal(
-      <div className={css.backdrop} onClick={close} role="dialog" aria-modal="true">
-        <div className={css.modal} onClick={e => e.stopPropagation()}>
-          {children}
-        </div>
-      </div>,
-      document.body
-    );
+  return createPortal(
+    <>
+      <div
+        onClick={handleBackDropClick}
+        className={css.backdrop}
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className={css.modal}>{children}</div>
+      </div>
+    </>,
+    document.body,
+  );
 }

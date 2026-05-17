@@ -16,12 +16,13 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
-export async function fetchNotes(page: number, search?: string) {
+export async function fetchNotes(page: number, search?: string,tag?: string) {
   const response = await instance.get<FetchNotesResponse>("/notes", {
     params: {
       page,
       perPage: 15,
       search,
+      tag,
     },
   });
 
@@ -29,7 +30,7 @@ export async function fetchNotes(page: number, search?: string) {
 }
 
 export const createNote = async (note: NoteFormValues) => {
-  const res = await instance.post("/notes", note);
+  const res = await instance.post<Note>("/notes", note);
   return res.data;
 };
 
