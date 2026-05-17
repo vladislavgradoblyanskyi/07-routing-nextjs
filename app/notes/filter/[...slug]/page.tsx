@@ -13,6 +13,7 @@ export default async function FilterPage({params}: Props) {
   const tag = slug?.[0];
   const allTag =tag === "all" ? undefined : tag;
   const data = await fetchNotes(1, allTag);
+
   return (
     <NotesClient notes={data.notes} />
   );
