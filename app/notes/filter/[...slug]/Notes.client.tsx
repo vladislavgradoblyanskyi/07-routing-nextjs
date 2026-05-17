@@ -1,7 +1,6 @@
 "use client";
 import NoteList from "@/components/NoteList/NoteList";
 import { Note } from "@/types/note";
-import css from "./Filter.module.css";
 
 type Props = {
   notes: Note[];
@@ -9,7 +8,7 @@ type Props = {
 
 export default function NotesClient({notes}: Props) {
   return (
-    <div className={css.div}>
+    <div>
       <NoteList notes={notes} />
     </div>
   );
